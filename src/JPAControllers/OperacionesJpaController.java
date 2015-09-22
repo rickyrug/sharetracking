@@ -138,17 +138,20 @@ public class OperacionesJpaController implements Serializable {
     }
      public double getSumOperacion(int p_portafolios, Date p_fecha, String p_operacion){
         String resultado = "";
+       
         EntityManager em = getEntityManager();
         Query query = em.createNamedQuery("Operaciones.getSumbyOperation");
         query.setParameter("portafolios", new Portafolios(p_portafolios));
         query.setParameter("fecha", p_fecha);
         query.setParameter("operacion", p_operacion);
-        resultado = query.getSingleResult().toString();
+        List<Object> operacioneslist = query.getResultList();
+//        resultado = query.getSingleResult().toString();
         
-        if (resultado.isEmpty()) {
+        if (operacioneslist.get(0) == null) {
             return 0;
         } else {
-            return Double.parseDouble(resultado);
+            
+            return (double)operacioneslist.get(0);
         }
         
     }
