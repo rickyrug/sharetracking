@@ -129,5 +129,20 @@ public class OperacionGestorTest {
         assertNotNull(result);
 
     }
+
+    /**
+     * Test of find_operacionbyid method, of class OperacionGestor.
+     */
+    @Test
+    public void testFind_operacionbyid() {
+        System.out.println("find_operacionbyid");
+        int p_idoperacion = 0;
+        OperacionGestor instance = null;
+        Operaciones expResult = null;
+        Operaciones result = instance.find_operacionbyid(p_idoperacion);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
     
 }
