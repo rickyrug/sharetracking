@@ -8,7 +8,6 @@ package DAOsubScreens;
 import DAO.PortafolioGestor;
 import JPAControllers.exceptions.IllegalOrphanException;
 import JPAControllers.exceptions.NonexistentEntityException;
-import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import entity.Portafolios;
 import java.text.DateFormat;
 import java.text.ParseException;
