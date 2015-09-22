@@ -6,11 +6,8 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,12 +15,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -35,16 +30,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Portafolios.findAll", query = "SELECT p FROM Portafolios p"),
     @NamedQuery(name = "Portafolios.findByIdportafolios", query = "SELECT p FROM Portafolios p WHERE p.idportafolios = :idportafolios"),
-    @NamedQuery(name = "Portafolios.findByNombre", query = "SELECT p FROM Portafolios p WHERE p.nombre = :valnombre"),
+    @NamedQuery(name = "Portafolios.findByNombre", query = "SELECT p FROM Portafolios p WHERE p.nombre = :nombre"),
     @NamedQuery(name = "Portafolios.findByValorinicial", query = "SELECT p FROM Portafolios p WHERE p.valorinicial = :valorinicial"),
     @NamedQuery(name = "Portafolios.findByFechacreacion", query = "SELECT p FROM Portafolios p WHERE p.fechacreacion = :fechacreacion")})
 public class Portafolios implements Serializable {
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "portafolios")
-    private List<Operaciones> operacionesList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "protafolios")
-    private Collection<Resultados> resultadosCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "portafolios")
-    private Collection<Aportaciones> aportacionesCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -131,33 +120,6 @@ public class Portafolios implements Serializable {
     @Override
     public String toString() {
         return "entity.Portafolios[ idportafolios=" + idportafolios + " ]";
-    }
-
-    @XmlTransient
-    public Collection<Aportaciones> getAportacionesCollection() {
-        return aportacionesCollection;
-    }
-
-    public void setAportacionesCollection(Collection<Aportaciones> aportacionesCollection) {
-        this.aportacionesCollection = aportacionesCollection;
-    }
-
-    @XmlTransient
-    public Collection<Resultados> getResultadosCollection() {
-        return resultadosCollection;
-    }
-
-    public void setResultadosCollection(Collection<Resultados> resultadosCollection) {
-        this.resultadosCollection = resultadosCollection;
-    }
-
-    @XmlTransient
-    public List<Operaciones> getOperacionesList() {
-        return operacionesList;
-    }
-
-    public void setOperacionesList(List<Operaciones> operacionesList) {
-        this.operacionesList = operacionesList;
     }
     
 }

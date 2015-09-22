@@ -6,17 +6,15 @@
 package JPAControllers;
 
 import JPAControllers.exceptions.NonexistentEntityException;
+import entity.Resultados;
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import entity.Portafolios;
-import entity.Resultados;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -38,16 +36,7 @@ public class ResultadosJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Portafolios protafolios = resultados.getProtafolios();
-            if (protafolios != null) {
-                protafolios = em.getReference(protafolios.getClass(), protafolios.getIdportafolios());
-                resultados.setProtafolios(protafolios);
-            }
             em.persist(resultados);
-            if (protafolios != null) {
-                protafolios.getResultadosCollection().add(resultados);
-                protafolios = em.merge(protafolios);
-            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -61,22 +50,7 @@ public class ResultadosJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Resultados persistentResultados = em.find(Resultados.class, resultados.getIdresultados());
-            Portafolios protafoliosOld = persistentResultados.getProtafolios();
-            Portafolios protafoliosNew = resultados.getProtafolios();
-            if (protafoliosNew != null) {
-                protafoliosNew = em.getReference(protafoliosNew.getClass(), protafoliosNew.getIdportafolios());
-                resultados.setProtafolios(protafoliosNew);
-            }
             resultados = em.merge(resultados);
-            if (protafoliosOld != null && !protafoliosOld.equals(protafoliosNew)) {
-                protafoliosOld.getResultadosCollection().remove(resultados);
-                protafoliosOld = em.merge(protafoliosOld);
-            }
-            if (protafoliosNew != null && !protafoliosNew.equals(protafoliosOld)) {
-                protafoliosNew.getResultadosCollection().add(resultados);
-                protafoliosNew = em.merge(protafoliosNew);
-            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -105,11 +79,6 @@ public class ResultadosJpaController implements Serializable {
                 resultados.getIdresultados();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The resultados with id " + id + " no longer exists.", enfe);
-            }
-            Portafolios protafolios = resultados.getProtafolios();
-            if (protafolios != null) {
-                protafolios.getResultadosCollection().remove(resultados);
-                protafolios = em.merge(protafolios);
             }
             em.remove(resultados);
             em.getTransaction().commit();
@@ -167,8 +136,9 @@ public class ResultadosJpaController implements Serializable {
     }
     
     public List<Resultados> getResultadosByPortafolios(int p_idportafolios){
-       EntityManager em = getEntityManager();
-      return em.createNamedQuery("Resultados.findByPortafolios").setParameter("portafolios", new Portafolios(p_idportafolios)).getResultList();
-
+        EntityManager em = getEntityManager();
+        Query query = em.createNamedQuery("Resultados.findByPortafolios");
+        query.setParameter("portafolios", p_idportafolios);
+        return query.getResultList();
     }
 }

@@ -42,7 +42,6 @@ public class OperacionesJpaController implements Serializable {
             em.getTransaction().commit();
         } finally {
             if (em != null) {
-                
                 em.close();
             }
         }
@@ -137,8 +136,7 @@ public class OperacionesJpaController implements Serializable {
             em.close();
         }
     }
-    
-        public double getSumOperacion(int p_portafolios, Date p_fecha, String p_operacion){
+     public double getSumOperacion(int p_portafolios, Date p_fecha, String p_operacion){
         String resultado = "";
         EntityManager em = getEntityManager();
         Query query = em.createNamedQuery("Operaciones.getSumbyOperation");
@@ -163,5 +161,10 @@ public class OperacionesJpaController implements Serializable {
         
         return query.getResultList();
      }
-    
+     
+     public Portafolios findbyname(String name){
+        EntityManager em = getEntityManager();
+      
+        return (Portafolios)em.createNamedQuery("Portafolios.findByNombre").setParameter("valnombre", name).getSingleResult();
+    }
 }
