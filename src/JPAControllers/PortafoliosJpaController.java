@@ -137,6 +137,6 @@ public class PortafoliosJpaController implements Serializable {
     public Portafolios findbyname(String name){
         EntityManager em = getEntityManager();
       
-        return (Portafolios)em.createNamedQuery("Portafolios.findByNombre").setParameter("valnombre", name).getSingleResult();
+        return (Portafolios)em.createNamedQuery("Portafolios.findByNombre").setParameter("nombre", name).getSingleResult();
     }
 }

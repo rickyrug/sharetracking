@@ -8,6 +8,7 @@ package DAOsubScreens;
 import DAO.PortafolioGestor;
 import JPAControllers.exceptions.IllegalOrphanException;
 import JPAControllers.exceptions.NonexistentEntityException;
+import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import entity.Portafolios;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -256,6 +257,9 @@ public class PortafoliosForm extends javax.swing.JPanel {
                     Logger.getLogger(AportacionesForm.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IllegalOrphanException ex) {
                      JOptionPane.showMessageDialog(this, "No se ha podido borrar el portafolios, ya que tiene operaciones y/o resultadost!", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    Logger.getLogger(PortafoliosForm.class.getName()).log(Level.SEVERE, null, ex);
+                }catch(Exception ex){
+                      JOptionPane.showMessageDialog(this, "No se ha podido borrar el portafolios, ya que tiene operaciones y/o resultadost!", "ERROR", JOptionPane.ERROR_MESSAGE);
                     Logger.getLogger(PortafoliosForm.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
