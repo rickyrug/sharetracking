@@ -11,6 +11,9 @@ import JPAControllers.ResultadosJpaController;
 import JPAControllers.exceptions.NonexistentEntityException;
 import entity.Portafolios;
 import entity.Resultados;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
@@ -57,17 +60,29 @@ public class ResultadosGestor {
         this.controller.edit(p_resultado);
     }
     
-    public double calculate_profit(double p_valor, int p_portafolios, Date p_fecha){
-    
+    public double calculate_profit(double p_valor, int p_portafolios, Date p_fecha) throws ParseException{
+        DateFormat fecha_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        
         Portafolios currentPortafolios = this.controllerPortafolios.findPortafolios(p_portafolios);
-        double aportaciones            = this.controllerOperaciones.getSumOperacion(p_portafolios, p_fecha,"AP");
+        double aportaciones            = this.controllerOperaciones.getSumOperacion(p_portafolios, 
+                                         fecha_format.parse(fecha_format.format(p_fecha)),"AP");
         
         
         return p_valor -(currentPortafolios.getValorinicial() + aportaciones );
     }
 
-    public double calculate_rendimiento(double p_valor, double p_profit){
+    public double calculate_rendimiento(int p_portafolios, double p_profit,Date p_fecha) throws ParseException{
+        
+         DateFormat fecha_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        
+        Portafolios currentPortafolios = this.controllerPortafolios.findPortafolios(p_portafolios);
+        double      aportaciones            = this.controllerOperaciones.getSumOperacion(p_portafolios, 
+                                         fecha_format.parse(fecha_format.format(p_fecha)),"AP");
+        
+        return p_profit / (currentPortafolios.getValorinicial() + aportaciones);
+    }
     
-        return p_profit / p_valor;
+    public Resultados get_resultadobyid(int p_idresultado){
+       return this.controller.findResultados(p_idresultado);
     }
 }

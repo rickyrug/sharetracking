@@ -80,7 +80,7 @@ public class AportacionesForm extends javax.swing.JPanel {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Fecha");
 
-        fechatxt.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("YYYY-MM-dd"))));
+        fechatxt.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))));
         fechatxt.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -220,6 +220,7 @@ public class AportacionesForm extends javax.swing.JPanel {
 
     private void btnguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardarActionPerformed
         String scantidad = this.cantidad.getText();
+        String var_fecha = this.fechatxt.getText();
         try {
             this.operacionGestor.add_operacion(this.fecha_format.parse(this.fechatxt.getText()),
                                                Double.parseDouble(scantidad.substring(1,scantidad.length())), 
@@ -233,8 +234,7 @@ public class AportacionesForm extends javax.swing.JPanel {
     private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
 
         this.set_selectedOperacion();
-
-         
+  
     }//GEN-LAST:event_tablaMouseClicked
 
     private void set_selectedOperacion(){
@@ -341,8 +341,7 @@ public class AportacionesForm extends javax.swing.JPanel {
         this.tabla.revalidate();
     }
 private DefaultTableModel remove_rows(DefaultTableModel p_model){
-   
-        
+    
     for(int i=0;i<p_model.getRowCount();i++){
         p_model.removeRow(i);
         

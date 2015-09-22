@@ -6,6 +6,7 @@
 package JPAControllers;
 
 import JPAControllers.exceptions.NonexistentEntityException;
+import entity.Portafolios;
 import entity.Resultados;
 import java.io.Serializable;
 import java.util.List;
@@ -138,7 +139,7 @@ public class ResultadosJpaController implements Serializable {
     public List<Resultados> getResultadosByPortafolios(int p_idportafolios){
         EntityManager em = getEntityManager();
         Query query = em.createNamedQuery("Resultados.findByPortafolios");
-        query.setParameter("portafolios", p_idportafolios);
+        query.setParameter("portafolios", new Portafolios(p_idportafolios));
         return query.getResultList();
     }
 }
