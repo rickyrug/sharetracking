@@ -180,7 +180,7 @@ public class StockTracker extends javax.swing.JFrame {
     private void change_layout(JPanel new_panel){
         new_panel.repaint();
         main.removeAll();
-      
+       
         main.add(new_panel);
         main.repaint();
         main.updateUI();

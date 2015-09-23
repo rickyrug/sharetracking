@@ -136,7 +136,7 @@ public class OperacionGestorTest {
     @Test
     public void testFind_operacionbyid() {
         System.out.println("find_operacionbyid");
-        int p_idoperacion = 0;
+        int p_idoperacion = 100;
         OperacionGestor instance = null;
         Operaciones expResult = null;
         Operaciones result = instance.find_operacionbyid(p_idoperacion);

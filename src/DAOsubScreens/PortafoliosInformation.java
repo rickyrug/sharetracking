@@ -195,19 +195,27 @@ public class PortafoliosInformation extends javax.swing.JPanel {
     private void cbportafoliosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbportafoliosActionPerformed
         double var_valorinicial = 0 ;
         double var_aportaciones = 0;
+        double var_retiros = 0;
+        double var_total = 0;
         try {
             this.selectedPortafolios = this.portafoliosGestor.find_portafoliosbyname(this.cbportafolios.getSelectedItem().toString());
             var_valorinicial = this.selectedPortafolios.getValorinicial();
             var_aportaciones = this.operacionGestor.get_operaciones_totales(this.selectedPortafolios.getIdportafolios(),
                     this.fecha_format.parse(this.tffecha.getText()),
                     "AP");
+            var_retiros      = this.operacionGestor.get_operaciones_totales(this.selectedPortafolios.getIdportafolios(),
+                    this.fecha_format.parse(this.tffecha.getText()),
+                    "RT");
         } catch (ParseException ex) {
             Logger.getLogger(PortafoliosInformation.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        var_total = var_valorinicial +var_aportaciones - var_retiros;
         
         this.tfvalorinicial.setText(new DecimalFormat("$#.##").format(var_valorinicial));
         this.tftotalaportaciones.setText(new DecimalFormat("$#.##").format(var_aportaciones));
+        this.tftotalretiros.setText(new DecimalFormat("$#.##").format(var_retiros));
+        this.tfvalortotal.setText(new DecimalFormat("$#.##").format(var_total));
     }//GEN-LAST:event_cbportafoliosActionPerformed
 
 public DefaultComboBoxModel get_portafolios() {
