@@ -8,6 +8,7 @@ package DAOsubScreens;
 import DAO.OperacionGestor;
 import DAO.PortafolioGestor;
 import DAO.ResultadosGestor;
+import JPAControllers.exceptions.NonexistentEntityException;
 import entity.Operaciones;
 import entity.Portafolios;
 import entity.Resultados;
@@ -162,6 +163,11 @@ public class ResultadosForm extends javax.swing.JPanel {
                 tablaMouseClicked(evt);
             }
         });
+        tabla.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tablaKeyPressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabla);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -296,6 +302,72 @@ public class ResultadosForm extends javax.swing.JPanel {
     private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
        this.set_selectedResultado();
     }//GEN-LAST:event_tablaMouseClicked
+
+    private void tablaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tablaKeyPressed
+        String new_valor = ""; 
+        String new_profit = "";
+        String new_rendimiento = "";
+        String new_fecha       = "";
+        if(evt.getKeyCode() == evt.VK_ENTER){
+             Object[] options = {"Guardar Cambios",
+                    "Cancelar",
+                    "Borrar"};
+           int respuesta = JOptionPane.showOptionDialog(this, "¿Qué desea hacer?", 
+                     "Confirmación", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, 
+                     null, options, options[2]);
+           
+           switch (respuesta){
+           
+               case 0: // Guardar cambios       
+             {
+                 try {
+                     this.set_selectedResultado();
+                     
+                     new_valor = this.tabla.getValueAt(this.tabla.getSelectedRow(), 3).toString();
+                     new_rendimiento = this.tabla.getValueAt(this.tabla.getSelectedRow(), 5).toString();
+                     new_profit = this.tabla.getValueAt(this.tabla.getSelectedRow(), 4).toString();
+                     new_fecha  = this.tabla.getValueAt(this.tabla.getSelectedRow(), 1).toString();
+                     
+                     this.selectedResultado.setProfit(Double.parseDouble(new_profit));
+                     this.selectedResultado.setRendimiento(Double.parseDouble(new_rendimiento));
+                     this.selectedResultado.setValor(Double.parseDouble(new_valor));
+                     this.selectedResultado.setFecha(this.fecha_format.parse(new_fecha));
+                     
+                     this.resultadosGestor.update_resultado(selectedResultado);
+                     this.set_resultados();
+                 } catch (ParseException ex) {
+                     JOptionPane.showMessageDialog(this, "ERROR EN EL GUARDADO","ERROR",JOptionPane.ERROR_MESSAGE);
+                     Logger.getLogger(RetirosForms.class.getName()).log(Level.SEVERE, null, ex);
+                 } catch (NonexistentEntityException ex) {
+                     Logger.getLogger(RetirosForms.class.getName()).log(Level.SEVERE, null, ex);
+                 } catch (Exception ex) {
+                      JOptionPane.showMessageDialog(this, "ERROR EN EL GUARDADO","ERROR",JOptionPane.ERROR_MESSAGE);
+                     Logger.getLogger(RetirosForms.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+             }
+                   break;
+               case 1: //Cancelar,
+                break;
+               case 2: {
+                 try {
+                     //Borrar
+                     this.set_selectedResultado();
+                     this.resultadosGestor.delete_aportaciones(this.selectedResultado.getIdresultados());
+                     JOptionPane.showMessageDialog(this, "Se ha borrado la operacion con ID: "+this.selectedResultado.getIdresultados(), "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+                     this.set_resultados();
+                 } catch (NonexistentEntityException ex) {
+                     JOptionPane.showMessageDialog(this,"No se ha dado clic sobre la operacion!","ERROR",JOptionPane.ERROR_MESSAGE);
+                     Logger.getLogger(RetirosForms.class.getName()).log(Level.SEVERE, null, ex);
+                 } catch (ParseException ex) {
+                     Logger.getLogger(RetirosForms.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+             }
+                   break;
+           
+           }
+           
+         }
+    }//GEN-LAST:event_tablaKeyPressed
 
      private void set_selectedResultado() {
         String var_idresultado = this.tabla.getValueAt(this.tabla.getSelectedRow(), 0).toString();

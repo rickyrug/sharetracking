@@ -7,7 +7,15 @@ package DAOsubScreens;
 
 import DAO.OperacionGestor;
 import DAO.PortafolioGestor;
+import DAO.ResultadosGestor;
+import com.xeiam.xchart.Chart;
+import com.xeiam.xchart.ChartBuilder;
+import com.xeiam.xchart.QuickChart;
+import com.xeiam.xchart.Series;
+import com.xeiam.xchart.SeriesMarker;
+import com.xeiam.xchart.SwingWrapper;
 import entity.Portafolios;
+import entity.Resultados;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -28,12 +36,14 @@ public class PortafoliosInformation extends javax.swing.JPanel {
      */
     private final PortafolioGestor portafoliosGestor;
     private final OperacionGestor  operacionGestor;
+    private final ResultadosGestor resultadoGestor;
     private Portafolios selectedPortafolios;
     private final DateFormat fecha_format;
-    public PortafoliosInformation(PortafolioGestor p_portafoliosGestor, OperacionGestor p_oprecionGestor) {
+    public PortafoliosInformation(PortafolioGestor p_portafoliosGestor, OperacionGestor p_oprecionGestor,ResultadosGestor p_resultadogestor) {
         this.portafoliosGestor = p_portafoliosGestor;
         this.operacionGestor   = p_oprecionGestor;
         this.fecha_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        this.resultadoGestor = p_resultadogestor;
         initComponents();
     }
 
@@ -60,6 +70,7 @@ public class PortafoliosInformation extends javax.swing.JPanel {
         tfvalortotal = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         tffecha = new javax.swing.JTextField();
+        btngrafica = new javax.swing.JToggleButton();
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -120,6 +131,14 @@ public class PortafoliosInformation extends javax.swing.JPanel {
         tffecha.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tffecha.setText("2015-09-01 00:00:00");
 
+        btngrafica.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btngrafica.setText("Grafica");
+        btngrafica.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btngraficaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -127,19 +146,6 @@ public class PortafoliosInformation extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(tfvalorinicial, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
-                            .addComponent(tftotalaportaciones)
-                            .addComponent(tftotalretiros)
-                            .addComponent(tfvalortotal))
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btrefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -152,7 +158,23 @@ public class PortafoliosInformation extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tffecha, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)))))
+                                .addComponent(tffecha, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btngrafica, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(tfvalorinicial, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                                    .addComponent(tftotalaportaciones)
+                                    .addComponent(tftotalretiros)
+                                    .addComponent(tfvalortotal))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -184,7 +206,9 @@ public class PortafoliosInformation extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfvalortotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btngrafica, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -218,6 +242,26 @@ public class PortafoliosInformation extends javax.swing.JPanel {
         this.tfvalortotal.setText(new DecimalFormat("$#.##").format(var_total));
     }//GEN-LAST:event_cbportafoliosActionPerformed
 
+    private void btngraficaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btngraficaActionPerformed
+      Chart chart = new ChartBuilder().xAxisTitle("X").yAxisTitle("Y").width(600).height(400).build();
+      chart.getStyleManager().setYAxisMin(-1000);
+      chart.getStyleManager().setYAxisMax(5100);
+      Series series = chart.addSeries(this.selectedPortafolios.getNombre(), null,this.generate_data_valor(this.resultadoGestor.get_aportacionesList(this.selectedPortafolios.getIdportafolios())) );
+      series.setMarker(SeriesMarker.NONE);
+     new SwingWrapper(chart).displayChartMatrix();
+    }//GEN-LAST:event_btngraficaActionPerformed
+
+    private double[] generate_data_valor(List<Resultados> resultados){
+       
+        double[] y = new double[resultados.size()];
+        
+        for (int i = 1; i < y.length; i++) {
+      
+            y[i] = resultados.get(i).getValor();
+      
+    }
+       return y; 
+    }
 public DefaultComboBoxModel get_portafolios() {
         DefaultComboBoxModel model = new DefaultComboBoxModel();
 
@@ -230,6 +274,7 @@ public DefaultComboBoxModel get_portafolios() {
         return model;
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToggleButton btngrafica;
     private javax.swing.JButton btrefresh;
     private javax.swing.JComboBox cbportafolios;
     private javax.swing.JLabel jLabel1;
