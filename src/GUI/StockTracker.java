@@ -28,6 +28,7 @@ public class StockTracker extends javax.swing.JFrame {
     private final RetirosForms     retirospanel;
     private final PortafoliosForm  portafoliospanel;
     private final ResultadosForm   resultadospanel;
+    private final PortafoliosInformation portafoliosinformationpanel;
     
     public StockTracker() {
         initComponents();
@@ -40,7 +41,8 @@ public class StockTracker extends javax.swing.JFrame {
         this.retirospanel      =  new RetirosForms(this.portafoliosGestor, this.operacionGestor);
         this.portafoliospanel  = new PortafoliosForm(this.portafoliosGestor);
         this.resultadospanel   = new ResultadosForm(this.portafoliosGestor,this.resultadosGestor);
-       }
+        this.portafoliosinformationpanel = new PortafoliosInformation(this.portafoliosGestor, this.operacionGestor);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -58,6 +60,7 @@ public class StockTracker extends javax.swing.JFrame {
         retiros = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         mnitmportafolios = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         miagregar = new javax.swing.JMenuItem();
 
@@ -107,6 +110,14 @@ public class StockTracker extends javax.swing.JFrame {
             }
         });
         jMenu2.add(mnitmportafolios);
+
+        jMenuItem1.setText("Información");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem1);
 
         menubar.add(jMenu2);
 
@@ -162,6 +173,10 @@ public class StockTracker extends javax.swing.JFrame {
        this.change_layout(this.resultadospanel);
     }//GEN-LAST:event_miagregarActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+       this.change_layout(this.portafoliosinformationpanel);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     private void change_layout(JPanel new_panel){
         new_panel.repaint();
         main.removeAll();
@@ -210,6 +225,7 @@ public class StockTracker extends javax.swing.JFrame {
     private javax.swing.JMenuItem aportaciones;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel main;
     private javax.swing.JMenuBar menubar;
     private javax.swing.JMenuItem miagregar;

@@ -66,9 +66,10 @@ public class ResultadosGestor {
         Portafolios currentPortafolios = this.controllerPortafolios.findPortafolios(p_portafolios);
         double aportaciones            = this.controllerOperaciones.getSumOperacion(p_portafolios, 
                                          fecha_format.parse(fecha_format.format(p_fecha)),"AP");
+        double retiros                =  this.controllerOperaciones.getSumOperacion(p_portafolios, 
+                                         fecha_format.parse(fecha_format.format(p_fecha)),"RT");
         
-        
-        return p_valor -(currentPortafolios.getValorinicial() + aportaciones );
+        return p_valor -(currentPortafolios.getValorinicial() + aportaciones - retiros );
     }
 
     public double calculate_rendimiento(int p_portafolios, double p_profit,Date p_fecha) throws ParseException{
@@ -76,10 +77,11 @@ public class ResultadosGestor {
          DateFormat fecha_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         
         Portafolios currentPortafolios = this.controllerPortafolios.findPortafolios(p_portafolios);
-        double      aportaciones            = this.controllerOperaciones.getSumOperacion(p_portafolios, 
+        double      aportaciones       = this.controllerOperaciones.getSumOperacion(p_portafolios, 
                                          fecha_format.parse(fecha_format.format(p_fecha)),"AP");
-        
-        return p_profit / (currentPortafolios.getValorinicial() + aportaciones);
+        double retiros                =  this.controllerOperaciones.getSumOperacion(p_portafolios, 
+                                         fecha_format.parse(fecha_format.format(p_fecha)),"RT");  
+        return p_profit  / (currentPortafolios.getValorinicial() + aportaciones - retiros);
     }
     
     public Resultados get_resultadobyid(int p_idresultado){
